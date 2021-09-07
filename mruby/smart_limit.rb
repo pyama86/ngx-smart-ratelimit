@@ -33,6 +33,9 @@ Nginx.return -> do
       return Nginx::DECLINED
     end
 
+    # アセットファイルはクッキーを付与しない
+    return Nginx::HTTP_SERVICE_UNAVAILABLE if static_file_ext[File.extname(r.var.request_filename)]
+
     if s
       next_sess = (a = redis.lrange(LIST_KEY, 0, 0)) ? a.first : nil
       Nginx.errlogger Nginx::LOG_INFO, "#{skey} next sess:#{next_sess}"

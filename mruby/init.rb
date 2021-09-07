@@ -47,3 +47,46 @@ def count_connection(redis, host, value)
     redis.expire("#{host}_#{(Time.now).min.to_s}", 121)
   redis.exec
 end
+
+def static_file_ext
+  {
+    '.less' => true,
+    '.txt' => true,
+    '.css' => true,
+    '.js' => true,
+    '.jpg' => true,
+    '.jpeg' => true,
+    '.gif' => true,
+    '.ico' => true,
+    '.png' => true,
+    '.bmp' => true,
+    '.pict' => true,
+    '.csv' => true,
+    '.doc' => true,
+    '.pdf' => true,
+    '.pls' => true,
+    '.ppt' => true,
+    '.tif' => true,
+    '.tiff' => true,
+    '.eps' => true,
+    '.ejs' => true,
+    '.swf' => true,
+    '.midi' => true,
+    '.mid' => true,
+    '.ttf' => true,
+    '.eot' => true,
+    '.woff' => true,
+    '.otf' => true,
+    '.svg' => true,
+    '.svgz' => true,
+    '.webp' => true,
+    '.docx' => true,
+    '.xlsx' => true,
+    '.xls' => true,
+    '.pptx' => true,
+    '.ps' => true,
+    '.class' => true,
+    '.jar' => true
+  }
+
+end
