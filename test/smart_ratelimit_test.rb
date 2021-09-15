@@ -55,6 +55,7 @@ assert('SmartRateLimit.can_access_if_at_the_begining when begining session') do
 
   assert_true subject.can_access_if_at_the_begining
   assert_equal "2", redis.get("abcd")
+  assert_equal 600, redis.ttl("abcd")
   assert_nil redis.get("example.com_list_lock")
   assert_equal 1, redis.scard("example.com_#{(Time.now).min.to_s}")
   assert_equal 0, redis.llen("example.com_waitlist")
