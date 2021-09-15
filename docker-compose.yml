@@ -13,7 +13,7 @@ services:
       - redmine
     volumes:
       - ./conf.d:/etc/nginx/conf.d
-      - ./mruby:/etc/nginx/mruby
+      - ./ngx_mruby:/etc/nginx/mruby
       - ./logs:/usr/local/src/ngx_mruby/build/nginx/logs
     ports:
       - "9090:80"

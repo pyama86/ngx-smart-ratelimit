@@ -1,3 +1,4 @@
+MAX_CONNECTION=5
 
 Nginx.return -> do
   r = Nginx::Request.new
@@ -6,7 +7,7 @@ Nginx.return -> do
   CONNECTION_KEY= r.headers_in['Client-Num'] || c.remote_ip
 
   redis = Userdata.new("redis_#{Process.pid}").redis
-  smart_limit = SmartRateLimit(redis, r.var.http_cookie, r.hostname)
+  smart_limit = SmartRateLimit(redis:redis,cookie: r.var.http_cookie, hostname: r.hostname, max_connection: MAX_CONNECTION)
   begin
     r.headers_out['Set-Cookie'] = "#{smart_limit.cookie_key}=#{smart_limit.session_key}; HttpOnly;"
 
@@ -23,6 +24,7 @@ Nginx.return -> do
         return Nginx::DECLINED
       end
     rescue SmartRateLimit::PopOtherSessionError
+      Nginx.errlogger Nginx::LOG_ERR, "pop other session"
       return Nginx::HTTP_SERVICE_UNAVAILABLE
     end
 

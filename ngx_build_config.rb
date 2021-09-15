@@ -21,6 +21,7 @@ MRuby::Build.new do |conf|
   conf.gem :github => 'matsumotory/mruby-localmemcache'
   conf.gem :github => 'monochromegane/mruby-secure-random'
   conf.gem :github => 'pepabo/mruby-redis-retryable'
+  conf.gem :github => 'pyama86/ngx-smart-ratelimit'
 
   # ngx_mruby extended class
   conf.gem './mrbgems/ngx_mruby_mrblib'
