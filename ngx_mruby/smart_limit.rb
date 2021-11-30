@@ -7,9 +7,9 @@ Nginx.return -> do
   CONNECTION_KEY= r.headers_in['Client-Num'] || c.remote_ip
 
   redis = Userdata.new("redis_#{Process.pid}").redis
-  smart_limit = SmartRateLimit(redis:redis,cookie: r.var.http_cookie, hostname: r.hostname, max_connection: MAX_CONNECTION)
   begin
-    r.headers_out['Set-Cookie'] = "#{smart_limit.cookie_key}=#{smart_limit.session_key}; HttpOnly;"
+    smart_limit = SmartRateLimit.new(redis:redis,cookie: r.var.http_cookie, hostname: r.hostname, max_connection: MAX_CONNECTION, count_key: CONNECTION_KEY)
+    r.headers_out['Set-Cookie'] = "#{smart_limit.cookie_key}=#{smart_limit.session_key}; HttpOnly; #{r.scheme == 'https' ? 'Secure;' : nil}"
 
     if smart_limit.accept?
       smart_limit.add_connection(CONNECTION_KEY)
