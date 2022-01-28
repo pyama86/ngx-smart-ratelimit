@@ -3,8 +3,8 @@ class SmartRateLimit; end
 module SmartRateLimit::Store; end
 class SmartRateLimit
   include SmartRateLimit::Store
-  attr_reader :redis, :list_key, :list_ttl, :lock_key, :hostname, :max_connection, :count_key, :allowable_waiting_ttl, :allowable_access_ttl, :cookie
-  def initialize(redis:, cookie:, hostname: , count_key:, allowable_access_ttl: 600, max_connection: 10, list_ttl: 3600, allowable_waiting_ttl: 20)
+  attr_reader :redis, :list_key, :list_ttl, :lock_key, :hostname, :max_connection, :count_key, :allowable_waiting_ttl, :allowable_access_ttl, :cookie, :max_position
+  def initialize(redis:, cookie:, hostname: , count_key:, allowable_access_ttl: 600, max_connection: 10, list_ttl: 3600, allowable_waiting_ttl: 20, max_position: 100)
     @redis = redis
     @cookie = cookie
     @list_ttl = list_ttl
@@ -15,6 +15,7 @@ class SmartRateLimit
     @count_key=count_key
     @allowable_waiting_ttl=allowable_waiting_ttl
     @allowable_access_ttl=allowable_access_ttl
+    @max_position=max_position
   end
 
   def can_access_if_at_the_begining
@@ -22,7 +23,7 @@ class SmartRateLimit
       if begining_session_key
         if begining_session_key == session_key && lock
           begin
-            if max_connection > last_connection  && max_connection > current_connection
+            if max_connection > last_connection && max_connection > current_connection
               raise PopOtherSessionErrror unless delete_from_list(session_key)
               set_accept_flg
               add_connection(count_key)
@@ -69,6 +70,10 @@ class SmartRateLimit
 
   def target_ext?(ext)
     static_file_ext[ext]
+  end
+
+  def my_position
+    redis.lrange(list_key, 0, max_position).index(session_key)
   end
 
   private
