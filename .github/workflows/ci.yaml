@@ -1,0 +1,19 @@
+name: Build & Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MRUBY_CONFIG: ci/gcc-clang
+      CC: gcc
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - name: Ruby version
+        run: ruby -v
+      - name: Compiler version
+        run: ${{ env.CC }} --version
+      - name: Build and test
+        run: rake test
