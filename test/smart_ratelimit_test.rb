@@ -107,3 +107,9 @@ assert('SmartRateLimit.can_access_if_at_the_begining when session_value nil') do
   assert_equal "abcd", redis.lpop("example.com_waitlist")
   assert_nil redis.get("example.com_list_lock")
 end
+
+assert('SmartRateLimit.my_position') do
+  redis.lpush("example.com_waitlist", "abcd")
+  redis.lpush("example.com_waitlist", "aefgh")
+  assert_equal 1, subject.my_position
+end

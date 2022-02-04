@@ -5,6 +5,7 @@ end
 
 desc "test"
 task :test => :mruby do
+  sh "misc/redis.sh"
   sh "cd mruby && MRUBY_CONFIG=#{MRUBY_CONFIG} rake -m test:build && rake test:run"
 end
 

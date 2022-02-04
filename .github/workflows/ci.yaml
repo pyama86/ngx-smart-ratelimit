@@ -1,0 +1,15 @@
+name: Build & Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - run: sudo apt update -qqy && sudo apt install -qqy redis-server
+      - name: Ruby version
+        run: ruby -v
+      - name: Build and test
+        run: rake test
