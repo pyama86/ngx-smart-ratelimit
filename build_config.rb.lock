@@ -7,31 +7,31 @@ builds:
   host:
     https://github.com/monochromegane/mruby-secure-random.git:
       url: https://github.com/monochromegane/mruby-secure-random.git
-      branch: HEAD
+      branch: master
       commit: 4971702e8cd299054b3220b4adb6bc3031ae2881
       version: 0.0.0
     https://github.com/haconiwa/mruby-exec.git:
       url: https://github.com/haconiwa/mruby-exec.git
-      branch: HEAD
+      branch: master
       commit: 29085a3357ce6029e56f0e599a1a314d26bd2247
       version: 0.0.0
     https://github.com/matsumotory/mruby-redis.git:
       url: https://github.com/matsumotory/mruby-redis.git
-      branch: HEAD
+      branch: master
       commit: f1f98d9450783b8c281b5064554b12bfb9f0a65a
       version: 0.0.1
     https://github.com/mattn/mruby-onig-regexp.git:
       url: https://github.com/mattn/mruby-onig-regexp.git
-      branch: HEAD
+      branch: master
       commit: 76087d150d12f167e95ae10d326099b352cf3d18
       version: 0.0.0
     https://github.com/iij/mruby-process.git:
       url: https://github.com/iij/mruby-process.git
-      branch: HEAD
+      branch: master
       commit: 95da206a5764f4e80146979b8e35bd7a9afd6850
       version: 0.0.0
     https://github.com/matsumotory/mruby-pointer.git:
       url: https://github.com/matsumotory/mruby-pointer.git
-      branch: HEAD
+      branch: master
       commit: 8b46506dfdb12a79a16be1d1172ef3c9324bef96
       version: 0.0.1
