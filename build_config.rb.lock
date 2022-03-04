@@ -2,7 +2,7 @@
 mruby:
   version: 3.0.0
   release_no: 30000
-  git_commit: e5e7bd29efd49c4c207da2985610c9ad878d40b0
+  git_commit: 903c5f978a2966465d8d5c6dfac55a977d134287
 builds:
   host:
     https://github.com/monochromegane/mruby-secure-random.git:
@@ -15,33 +15,23 @@ builds:
       branch: HEAD
       commit: 29085a3357ce6029e56f0e599a1a314d26bd2247
       version: 0.0.0
-    https://github.com/pepabo/mruby-redis-retryable.git:
-      url: https://github.com/pepabo/mruby-redis-retryable.git
-      branch: HEAD
-      commit: 11ab407549770034de1a223b00de26915d174340
-      version: 0.0.0
     https://github.com/matsumotory/mruby-redis.git:
       url: https://github.com/matsumotory/mruby-redis.git
       branch: HEAD
       commit: f1f98d9450783b8c281b5064554b12bfb9f0a65a
-      version: 0.0.1
-    https://github.com/iij/mruby-process.git:
-      url: https://github.com/iij/mruby-process.git
-      branch: HEAD
-      commit: 95da206a5764f4e80146979b8e35bd7a9afd6850
-      version: 0.0.0
-    https://github.com/iij/mruby-errno.git:
-      url: https://github.com/iij/mruby-errno.git
-      branch: HEAD
-      commit: b4415207ff6ea62360619c89a1cff83259dc4db0
-      version: 0.0.0
-    https://github.com/matsumotory/mruby-pointer.git:
-      url: https://github.com/matsumotory/mruby-pointer.git
-      branch: HEAD
-      commit: 8b46506dfdb12a79a16be1d1172ef3c9324bef96
       version: 0.0.1
     https://github.com/mattn/mruby-onig-regexp.git:
       url: https://github.com/mattn/mruby-onig-regexp.git
       branch: HEAD
       commit: 76087d150d12f167e95ae10d326099b352cf3d18
       version: 0.0.0
+    https://github.com/iij/mruby-process.git:
+      url: https://github.com/iij/mruby-process.git
+      branch: HEAD
+      commit: 95da206a5764f4e80146979b8e35bd7a9afd6850
+      version: 0.0.0
+    https://github.com/matsumotory/mruby-pointer.git:
+      url: https://github.com/matsumotory/mruby-pointer.git
+      branch: HEAD
+      commit: 8b46506dfdb12a79a16be1d1172ef3c9324bef96
+      version: 0.0.1
