@@ -2,7 +2,7 @@
 mruby:
   version: 3.0.0
   release_no: 30000
-  git_commit: 903c5f978a2966465d8d5c6dfac55a977d134287
+  git_commit: 278f46f9716ef9aa41ea163665358cf7dd05e5ee
 builds:
   host:
     https://github.com/monochromegane/mruby-secure-random.git:
