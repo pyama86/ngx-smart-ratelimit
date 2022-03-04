@@ -8,7 +8,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2.4.0
-      - run: sudo apt update -qqy && sudo apt install -qqy redis-server
+      - run: sudo apt update -qqy && sudo apt install -qqy redis-server git
       - name: Ruby version
         run: ruby -v
       - name: Build and test
