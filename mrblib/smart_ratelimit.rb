@@ -26,7 +26,7 @@ class SmartRateLimit
         if begining_session_key == session_key && lock
           begin
             if max_connection > last_connection && max_connection > current_connection
-              raise PopOtherSessionErrror unless delete_from_list(session_key)
+              raise PopOtherSessionError unless delete_from_list(session_key)
 
               set_accept_flg
               add_connection(count_key)
