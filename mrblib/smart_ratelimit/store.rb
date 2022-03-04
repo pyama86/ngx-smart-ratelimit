@@ -1,7 +1,7 @@
 class SmartRateLimit
   module Store
-    WAITING="1"
-    ACCEPT="2"
+    WAITING = '1'
+    ACCEPT = '2'
     def accept?
       session_value == ACCEPT
     end
@@ -16,13 +16,13 @@ class SmartRateLimit
 
     def set_accept_flg
       redis.multi
-        redis.set(session_key, ACCEPT)
-        redis.expire(session_key, allowable_access_ttl)
+      redis.set(session_key, ACCEPT)
+      redis.expire(session_key, allowable_access_ttl)
       redis.exec
     end
 
     def set_wait_flg
-      redis.set(session_key, WAITING, "NX" => true) == 'OK'
+      redis.set(session_key, WAITING, 'NX' => true) == 'OK'
     end
 
     def delete_from_list(sess_key)
@@ -31,28 +31,27 @@ class SmartRateLimit
         redis.lpush(list_key, pop)
         return false
       end
-      return true
+      true
     end
 
     def add_wait_list(sess_key)
-      redis.multi
-        redis.rpush(list_key, sess_key)
-        redis.expire(list_key, list_ttl)
-      redis.exec
+      redis.rpush(list_key, sess_key) if redis.sadd("#{list_key}_lock", sess_key) == 1
+      redis.expire(list_key, list_ttl)
+      redis.expire("#{list_key}_lock", list_ttl)
     end
 
     def last_connection
-      @_lastconn ||= redis.scard("#{hostname}_#{(Time.now-60).min.to_s}")
+      @_lastconn ||= redis.scard("#{hostname}_#{(Time.now - 60).min}")
     end
 
     def current_connection
-      @_currentconn ||= redis.scard("#{hostname}_#{(Time.now).min.to_s}")
+      @_currentconn ||= redis.scard("#{hostname}_#{Time.now.min}")
     end
 
     def add_connection(value)
       redis.multi
-        redis.sadd("#{hostname}_#{(Time.now).min.to_s}", value)
-        redis.expire("#{hostname}_#{(Time.now).min.to_s}", 121)
+      redis.sadd("#{hostname}_#{Time.now.min}", value)
+      redis.expire("#{hostname}_#{Time.now.min}", 121)
       redis.exec
     end
 
@@ -61,7 +60,7 @@ class SmartRateLimit
     end
 
     def lock
-      redis.set(lock_key, "1", "NX" => true) == 'OK'
+      redis.set(lock_key, '1', 'NX' => true) == 'OK'
     end
 
     def unlock
