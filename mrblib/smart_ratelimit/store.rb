@@ -23,6 +23,7 @@ class SmartRateLimit
 
     def set_wait_flg
       redis.set(session_key, WAITING, 'NX' => true) == 'OK'
+      extend_ttl
     end
 
     def delete_from_list(sess_key)
