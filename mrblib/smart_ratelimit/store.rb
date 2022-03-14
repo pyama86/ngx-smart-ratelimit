@@ -35,7 +35,7 @@ class SmartRateLimit
     end
 
     def add_wait_list(sess_key)
-      redis.rpush(list_key, sess_key) if redis.sadd("#{list_key}_lock", sess_key) == 1
+      redis.rpush(list_key, sess_key) if !redis.exists?(list_key) || redis.sadd("#{list_key}_lock", sess_key) == 1
       redis.expire(list_key, list_ttl)
       redis.expire("#{list_key}_lock", list_ttl)
     end
