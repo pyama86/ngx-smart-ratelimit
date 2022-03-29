@@ -20,38 +20,36 @@ class SmartRateLimit
     @max_position = max_position
   end
 
-  def can_access_if_at_the_begining
-    if session_value
-      if begining_session_key
-        if begining_session_key == session_key && lock
-          begin
-            if max_connection > last_connection && max_connection > current_connection
-              raise PopOtherSessionError unless delete_from_list(session_key)
+  def wait_list_length
+    list_length(list_key)
+  end
 
-              set_accept_flg
-              add_connection(count_key)
-              return true
-            end
-          ensure
-            unlock
-          end
-        # 待ち行列の先頭が無効
-        elsif (!begining_session_value || begining_session_value == ACCEPT) && lock
-          begin
-            delete_from_list(begining_session_key)
-          ensure
-            unlock
-          end
-        end
-      end
-    elsif set_wait_flg
-      add_wait_list(session_key)
+  def can_access_if_at_the_begining
+    add_wait_list(session_key) if !session_value && set_wait_flg(session_key)
+    delete_begining_session_if_expired
+    if permit_access?
+      set_accept_flg(session_key) unless accept?
+    else
+      extend_ttl(session_key)
+      return false
     end
-    false
+    true
   end
 
   def cookie_key
     'waiting_key'
+  end
+
+  def target_ext?(ext)
+    static_file_ext[ext]
+  end
+
+  def my_position
+    position(session_key)
+  end
+
+  def accept?
+    session_value == ACCEPT
   end
 
   def session_key
@@ -71,15 +69,11 @@ class SmartRateLimit
     @_session_key
   end
 
-  def target_ext?(ext)
-    static_file_ext[ext]
-  end
-
-  def my_position
-    redis.lrange(list_key, 0, max_position).index(session_key)
-  end
-
   private
+
+  def session_value
+    @_sessv ||= value(session_key)
+  end
 
   def static_file_ext
     {
@@ -121,6 +115,33 @@ class SmartRateLimit
       '.class' => true,
       '.jar' => true
     }
+  end
+
+  def permit_access?
+    if begining_session_key == session_key && lock
+      begin
+        if max_connection > last_connection && max_connection > current_connection
+          raise PopOtherSessionError unless delete_from_list(session_key)
+
+          return true
+        end
+      ensure
+        unlock
+      end
+    end
+    false
+  end
+
+  # 先頭ユーザーが無効かすでにアクセス許可済み
+  def delete_begining_session_if_expired
+    return unless !begining_session_value || begining_session_value == ACCEPT
+
+    lock
+    begin
+      delete_from_list(begining_session_key)
+    ensure
+      unlock
+    end
   end
 
   class PopOtherSessionError < StandardError; end
