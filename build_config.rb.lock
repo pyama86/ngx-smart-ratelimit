@@ -18,7 +18,7 @@ builds:
     https://github.com/matsumotory/mruby-redis.git:
       url: https://github.com/matsumotory/mruby-redis.git
       branch: master
-      commit: f1f98d9450783b8c281b5064554b12bfb9f0a65a
+      commit: dd0fe278be33fdd169079d2a60e8fa0d499b3621
       version: 0.0.1
     https://github.com/mattn/mruby-onig-regexp.git:
       url: https://github.com/mattn/mruby-onig-regexp.git
