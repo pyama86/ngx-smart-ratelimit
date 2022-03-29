@@ -2,28 +2,19 @@ class SmartRateLimit
   module Store
     WAITING = '1'
     ACCEPT = '2'
-    def accept?
-      session_value == ACCEPT
+    def value(sess_key)
+      redis.get(sess_key)
     end
 
-    def session_value
-      @_sessv ||= redis.get(session_key)
-    end
-
-    def begining_session_value
-      @_bsessv ||= redis.get(begining_session_key)
-    end
-
-    def set_accept_flg
+    def set_accept_flg(sess_key)
       redis.multi
-      redis.set(session_key, ACCEPT)
-      redis.expire(session_key, allowable_access_ttl)
+      redis.set(sess_key, ACCEPT)
+      redis.expire(sess_key, allowable_access_ttl)
       redis.exec
     end
 
-    def set_wait_flg
-      redis.set(session_key, WAITING, 'NX' => true) == 'OK'
-      extend_ttl
+    def set_wait_flg(sess_key)
+      redis.set(sess_key, WAITING, 'NX' => true) == 'OK'
     end
 
     def delete_from_list(sess_key)
@@ -35,6 +26,10 @@ class SmartRateLimit
       true
     end
 
+    def list_length(key)
+      redis.llen(key)
+    end
+
     def add_wait_list(sess_key)
       redis.rpush(list_key, sess_key) if !redis.exists?(list_key) || redis.sadd("#{list_key}_lock", sess_key) == 1
       redis.expire(list_key, list_ttl)
@@ -42,11 +37,11 @@ class SmartRateLimit
     end
 
     def last_connection
-      @_lastconn ||= redis.scard("#{hostname}_#{(Time.now - 60).min}")
+      @last_connection ||= redis.scard("#{hostname}_#{(Time.now - 60).min}")
     end
 
     def current_connection
-      @_currentconn ||= redis.scard("#{hostname}_#{Time.now.min}")
+      @current_connection ||= redis.scard("#{hostname}_#{Time.now.min}")
     end
 
     def add_connection(value)
@@ -54,6 +49,10 @@ class SmartRateLimit
       redis.sadd("#{hostname}_#{Time.now.min}", value)
       redis.expire("#{hostname}_#{Time.now.min}", 121)
       redis.exec
+    end
+
+    def begining_session_value
+      @_bsessv ||= redis.get(begining_session_key)
     end
 
     def begining_session_key
@@ -68,8 +67,12 @@ class SmartRateLimit
       redis.del(lock_key)
     end
 
-    def extend_ttl
-      redis.expire(session_key, allowable_waiting_ttl)
+    def extend_ttl(sess_key)
+      redis.expire(sess_key, allowable_waiting_ttl)
+    end
+
+    def position(sess_key)
+      redis.lrange(list_key, 0, max_position).index(sess_key)
     end
   end
 end

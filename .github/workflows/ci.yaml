@@ -1,13 +1,13 @@
 name: Build & Test
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - run: sudo apt update -qqy && sudo apt install -qqy redis-server git
       - name: Ruby version
         run: ruby -v

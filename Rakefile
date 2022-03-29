@@ -1,6 +1,6 @@
 MRUBY_CONFIG = File.expand_path(ENV['MRUBY_CONFIG'] || 'build_config.rb')
 file :mruby do
-  sh 'git clone git://github.com/mruby/mruby.git'
+  sh 'git clone https://github.com/mruby/mruby.git'
 end
 
 desc 'test'
