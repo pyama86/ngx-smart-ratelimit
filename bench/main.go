@@ -21,8 +21,8 @@ func main() {
 	var ng uint64
 	for i := 0; i < concurrency; i++ {
 		i := i
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			defer wg.Done()
 			jar, err := cookiejar.New(nil)
 			if err != nil {
@@ -56,7 +56,6 @@ func main() {
 					fmt.Printf("current count :%d\n", current)
 				}
 				res = nil
-
 			}
 		}()
 	}
